@@ -1,6 +1,250 @@
+/*
+Color Pallete
+#161925 - Rising Black
+#23395B - Prussian Blue
+#406E8E - Queen Blue
+#8EA8C3 - Cadet Grey
+#FDFFF7 - Baby Powder
+
+Fonts
+-Titles
+font-family: "Varela Round", sans-serif;
+
+-Text box
+font-family: "Ubuntu", sans-serif;
+
+*/
+
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+* {
+  font-family: "Ubuntu", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*** Mobile Screen ***/
+/** Header **/
+.siteName {
+  padding: 1em;
+}
+
+.siteName a {
+  font-family: "Varela Round", sans-serif;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: black;
+}
+
+#tools {
+  margin-top: 0.5em;
+}
+
+#tools a {
+  font-family: "Ubuntu", sans-serif;
+  color: black;
+  text-transform: uppercase;
+}
+
+
+
+
+#top-header {
+
+  display: flex;
+  justify-content: space-around; 
+  
+}
+
+
+/* Navigation */
+#wrapper nav ul {
+  display: flex;
+  justify-content: space-around;
+  background-color: black;
+  padding: 0;
+  text-align: center;
+}
+
+#wrapper nav ul li {
+  list-style-type: none;
+}
+
+#wrapper nav ul li a {
+  display: block;
+  padding: 0.5em;
+
+  color: white;
+}
+
+#wrapper nav ul li a:hover {
+  background-color: white;
+  color: black;
+}
+
+/** Main **/
+
+main {
+  margin: 1em;
+}
+
+
+h1 {
+  font-size: 1.3em;
+}
+
+/* Hero */
+
+.hero-message {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.336);
+  color: #23395B;
+  position: absolute;
+  padding: 0.1em;
+  max-width: 40%;
+}
+
+.hero-message h2 {
+  margin: 0;
+  font-size: 1.3em;
+}
+
+.hero-message span {
+  margin: 0.1em;
+  font-size: 1em;
+}
+
+.hero-message a {
+  margin: 0.5em;
+  padding: 0.5em 1.2em;
+  background: #23395B;
+  color: white;
+  text-align: center;
+
+}
+
+
+.hero img {
+  width: 100%;
+}
+
+/* Spotlights */
+
+.spotlights {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Reviews */
+
+.reviews ul {
+  padding: 0 20px;
+  margin: 2em 0;
+}
+
+.reviews li {
+  margin: 10px 0;
+}
+
+/* Upgrades */
+.upgrades {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.upgrades h2 {
+  grid-column: 1/3;
+}
+
+.upgrades div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.upgrades figure {
+  background-color: #23395B;
+  border: black 1px solid;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.upgrades img {
+  margin-top: 10px;
+}
+
+/* Large Screen */
+@media screen and (min-width: 39.99em) {
+  
+  /* Body */
+  body {
+    display: flex;
+    justify-content: center;
+    background-image: url("../images/site/small_check.jpg");
+  }
+
+
+  #top-header {
+    justify-content: space-between;
+  }
+
+  .siteName a {
+    font-size: 2em;
+  }
+  /* Header */
+  #wrapper {
+    background-color: white;
+    padding: 2em;
+    margin: 1em;
+    border: #406E8E 5px solid;
+    border-radius: 20px;
+  }
+
+  /* Hero */
+
+  .hero img {
+    display: block;
+    max-width: 75%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .hero-message {
+    margin-top: 20px;
+  }
+  
+  .hero-message h2 {
+    font-size: 2em;
+  }
+
+  .hero-message span {
+    font-size: 1.3em;
+  }
+
+  /* Spotlights */
+
+  .spotlights {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .upgrades,
+  .reviews {
+    padding: 10px;
+  }
 }
