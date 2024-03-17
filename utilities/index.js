@@ -64,9 +64,7 @@ Util.buildByInvId = async function(data){
   let details
   if(Object.keys(data).length > 0){
     details = '<div class="productInfo">'
-    
     details += '<img src="' + data.inv_image + '" alt="Image of ' + data.inv_make + ' ' + data.inv_model + '">'
-    
     details += '<div class="productDetails">'
     details += '<h2>' + data.inv_year + ' ' + data.inv_make + ' ' + data.inv_model + ' Details</h2>'
     details += '<span class="detailPrice"><b>Price:</b> $'+ new Intl.NumberFormat('en-US').format(data.inv_price) + '</span>'
