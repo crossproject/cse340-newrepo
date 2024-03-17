@@ -65,10 +65,10 @@ Util.buildByInvId = async function(data){
   if(Object.keys(data).length > 0){
     details = '<div class="productInfo">'
     
-    details += '<img src="' + data.inv_image + '" alt=' + data.inv_make + ' ' + data.inv_model + '>'
+    details += '<img src="' + data.inv_image + '" alt="' + data.inv_make + ' ' + data.inv_model + '">'
     
     details += '<div class="productDetails">'
-    details += '<h2>' + data.inv_year + ' ' + data.inv_make + ' ' + data.inv_model + ' Details</h1>'
+    details += '<h2>' + data.inv_year + ' ' + data.inv_make + ' ' + data.inv_model + ' Details</h2>'
     details += '<span class="detailPrice"><b>Price:</b> $'+ new Intl.NumberFormat('en-US').format(data.inv_price) + '</span>'
     details += '<p><b>Description:</b> ' + data.inv_description + '</p>'
     details += '<span class="detailMiles"><b>Miles:</b> ' + new Intl.NumberFormat('en-US').format(data.inv_miles) + '</span>'
