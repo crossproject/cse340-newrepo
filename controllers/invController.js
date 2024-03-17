@@ -19,4 +19,29 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build car details by inventory view
+ * ************************** */
+invCont.buildByInvId = async function (req, res, next) {
+  const inv_id = req.params.invId
+  const data = await invModel.getCarDetailsByInvId(inv_id)
+  const details = await utilities.buildByInvId(data)
+  let nav = await utilities.getNav()
+  const carName = data.inv_make + ' ' + data.inv_model
+  res.render("./inventory/details", {
+    title:carName,
+    nav,
+    details,
+  })
+}
+
+/* ***************************
+ *  Bad function
+ * ************************** */
+invCont.badFunction = async function (req, res, next) {
+  res.render("./inventory/inexistent", {
+    title:inexistent
+  })
+}
+
 module.exports = invCont

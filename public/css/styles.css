@@ -224,8 +224,67 @@ h1 {
 .namePrice h2 {
   display: block;
   max-width: 200px;
-  font-size: 1.2rem;
+  max-height: 18px;
+  font-size: 100%;
 }
+
+.namePrice span {
+  display: block;
+}
+
+/* Car detail view */
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.productInfo img {
+  max-width: 100%;
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start;
+  max-width: 500px;
+  padding: 0 2em;
+}
+
+.productInfo h2 {
+  font-size: 1.2em;
+  margin: 10px 0 0 0 ;
+}
+
+.detailPrice,
+.detailMiles {
+  padding: 0.5em;
+}
+
+.productDetails p,
+.detailColor {
+  margin: 0;
+  padding: 0.5em;
+  background-color: #8ea8c330;
+}
+
+.detailPrice {
+  text-align: end;
+  font-size: 1.5em;
+}
+
+/* Error View */
+.errorView {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.errorView img {
+  max-width: 100%;
+}
+
+
 /* Large Screen */
 @media screen and (min-width: 39.99em) {
   
@@ -290,9 +349,17 @@ h1 {
   #inv-display {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   #inv-display li {
     margin: 10px;
+    
+  }
+
+  /* Error View */
+  .errorView img {
+  max-width: 500px;
+  margin: 0 auto;
   }
 }
