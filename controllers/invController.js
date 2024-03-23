@@ -14,6 +14,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
   const className = data[0].classification_name
   res.render("./inventory/classification", {
     title: className + " vehicles",
+    errors: null,
     nav,
     grid,
   })
@@ -30,10 +31,69 @@ invCont.buildByInvId = async function (req, res, next) {
   const carName = data.inv_make + ' ' + data.inv_model
   res.render("./inventory/details", {
     title:carName,
+    errors: null,
     nav,
     details,
   })
 }
+
+/* ***************************
+ *  Build management view
+ * ************************** */
+invCont.buildManagementView = async function (req, res, next) {
+  const invManagement = await utilities.buildManagementView()
+  let nav = await utilities.getNav()
+  res.render("./inventory/management", {
+    title:"Vehicle Management",
+    errors: null,
+    nav,
+    invManagement,
+  })
+}
+
+/* ***************************
+ *  Build add classification view
+ * ************************** */
+invCont.buildAddClassView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("./inventory/add-classification", {
+    title:"Add Classification",
+    errors: null,
+    nav,
+  })
+}
+
+/* ****************************************
+*  Add new classification
+* *************************************** */
+invCont.addClassification = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const { classification_name } = req.body
+
+  const addClassResult = await invModel.addClassification(
+    classification_name
+  )
+
+  if (addClassResult) {
+    req.flash(
+      "notice",
+      `The ${classification_name} was successfully added.`
+    )
+    res.status(201).render("inventory/add-classification", {
+      title: "Add Classification",
+      errors: null,
+      nav,
+    })
+  } else {
+    req.flash("notice", `Sorry, the ${classification_name} couldn't be added.`)
+    res.status(501).render("inventory/add-classification", {
+      title: "Add Classification",
+      errors: null,
+      nav,
+    })
+  }
+}
+
 
 /* ***************************
  *  Bad function

@@ -101,6 +101,20 @@ Util.buidErrorView = async function(message){
   return background
 }
 
+/* **************************************
+* Build the management view
+* ************************************ */
+Util.buildManagementView = async function(){
+  let manageItems = '<div class=manageItems>'
+
+  manageItems += '<a href="./inv/inventory/add-classification">Add New Classification</a>'
+  manageItems += '<br>'
+  manageItems += '<a href="./inv/inventory/add-add-inventory">Add New Vehicle</a>'
+  
+  manageItems += '</div>'
+  return manageItems
+}
+
 /* ****************************************
  * Word functions
  **************************************** */

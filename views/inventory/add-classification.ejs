@@ -1,0 +1,13 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+      res.redirect('/')
+    } %>
+
+<%# messages() %>
+
+<form id="addClassification" action="/inventory/add-classification.ejs" method="post">
+    <label for="classification_name">Classification Name</label>
+    <input type="text" name="classification_name" pattern="/^[0-9a-zA-Z]+$/" required>
+    <input type="submit" value="Add Classification">
+</form>
