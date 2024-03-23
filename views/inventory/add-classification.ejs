@@ -4,10 +4,18 @@
       res.redirect('/')
     } %>
 
-<%# messages() %>
+<%- messages() %>
 
-<form id="addClassification" action="/inventory/add-classification.ejs" method="post">
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+
+<form action="/inv/inventory/add-classification" method="post">
     <label for="classification_name">Classification Name</label>
-    <input type="text" name="classification_name" pattern="/^[0-9a-zA-Z]+$/" required>
+    <input type="text" name="classification_name" pattern="[a-zA-Z0-9]+" required value="<%= locals.classification_name %>">
     <input type="submit" value="Add Classification">
 </form>

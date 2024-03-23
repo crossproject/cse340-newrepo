@@ -19,7 +19,7 @@ router.get("/detail/:invId", utilities.handleErrors(invController.buildByInvId))
 // Inexistent route for 500-type error
 router.get("/faildirection", utilities.handleErrors(invController.badFunction))
 
-
+// Route to build add classification view
 router.get("/inventory/add-classification", utilities.handleErrors(invController.buildAddClassView));
 
 // Route for register a new classification
@@ -27,8 +27,18 @@ router.post(
     "/inventory/add-classification",
     invValidate.classificationRules(),
     invValidate.checkClassData,
-    utilities.handleErrors(invController.addClassification));
+    utilities.handleErrors(invController.addClassification)
+);
 
+// Route to build add vehicle view
+router.get("/inventory/add-inventory", utilities.handleErrors(invController.buildAddVehicleView));
 
+// Route to add a vehicle
+router.post(
+    "/inventory/add-inventory",
+    invValidate.inventoryRules(),
+    invValidate.checkInventoryData,
+    utilities.handleErrors(invController.addVehicle)
+);
 
 module.exports = router;
