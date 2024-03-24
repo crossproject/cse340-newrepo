@@ -2,6 +2,7 @@ const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const validate = {}
 const inventoryModel = require("../models/inventory-model")
+const Util = require(".")
 
   /*  **********************************
   *  Classification Data Validation Rules
@@ -58,55 +59,60 @@ validate.classificationRules = () => {
           .trim()
           .escape()
           .notEmpty()
-          .withMessage("Please provide a valid classification name"), // on error this message is sent.
+          .withMessage("Please select a classification"), // on error this message is sent.
           
+        body("inv_make")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 3 })
+        .matches("[a-zA-Z]{3,}", 'i')
+        .withMessage("Please provide a correct Make."), // on error this message is sent.
 
-        // body("inv_make")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .isLength({ min: 3 })
-        // .withMessage("Please provide a Make."), // on error this message is sent.
+        body("inv_model")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 3 })
+        .matches("[a-zA-Z]{3,}", 'i')
+        .withMessage("Please provide a correct Model."), // on error this message is sent.
 
-        // body("inv_model")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .isLength({ min: 3 })
-        // .withMessage("Please provide a Model."), // on error this message is sent.
+        body("inv_description")
+        .trim()
+        .escape()
+        .notEmpty()
+        .withMessage("Please provide a Description."), // on error this message is sent.
 
-        // body("inv_description")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .withMessage("Please provide a Description."), // on error this message is sent.
+        body("inv_price")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isNumeric()
+        .matches("[0-9]+", 'i')
+        .withMessage("Please provide a correct Price."), // on error this message is sent.
 
-        // body("inv_price")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .isNumeric()
-        // .withMessage("Please provide a Price."), // on error this message is sent.
+        body("inv_year")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isNumeric()
+        .matches("[0-9]{4}", 'i')
+        .withMessage("Please provide a correct Year."), // on error this message is sent.
 
-        // body("inv_year")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .isNumeric()
-        // .withMessage("Please provide a Year."), // on error this message is sent.
+        body("inv_miles")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isNumeric()
+        .matches("[0-9]+", 'i')
+        .withMessage("Please provide a correct Mileage."), // on error this message is sent.
 
-        // body("inv_miles")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .isNumeric()
-        // .withMessage("Please provide a Mileage."), // on error this message is sent.
-
-        // body("inv_color")
-        // .trim()
-        // .escape()
-        // .notEmpty()
-        // .withMessage("Please provide a Color."), // on error this message is sent.
+        body("inv_color")
+        .trim()
+        .escape()
+        .notEmpty()
+        .matches("[a-zA-Z]+", 'i')
+        .withMessage("Please provide a correct Color."), // on error this message is sent.
 
     ]
 }
@@ -116,7 +122,7 @@ validate.classificationRules = () => {
  * ***************************** */
  validate.checkInventoryData = async (req, res, next) => {
   const { classification_id, inv_make, inv_model, inv_description, inv_price, inv_year, inv_miles, inv_color } = req.body
-  let classificationList = classification_id
+  let classificationList = await Util.buildClassificationList(classification_id)
   let errors = []
   errors = validationResult(req)
   if (!errors.isEmpty()) {

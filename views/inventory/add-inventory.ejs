@@ -19,13 +19,13 @@
     <%- classificationList %>
 
     <label for="inv_make">Make</label>
-    <input type="text" name="inv_make" pattern="[a-zA-Z]+" required value="<%= locals.inv_make %>">
+    <input type="text" name="inv_make" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_make %>">
 
     <label for="inv_model">Model</label>
-    <input type="text" name="inv_model" pattern="[a-zA-Z0-9]+" required value="<%= locals.inv_model %>">
+    <input type="text" name="inv_model" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_model %>">
 
     <label for="inv_description">Description</label>
-    <textarea name="inv_description" required value="<%= locals.inv_description %>"></textarea>
+    <textarea name="inv_description" required><%= locals.inv_description %></textarea>
 
     <label for="inv_image">Image Path</label>
     <input type="text" name="inv_image" readonly value="/images/vehicles/no-image.png">
