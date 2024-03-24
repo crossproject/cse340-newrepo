@@ -81,12 +81,7 @@ invCont.addClassification = async function (req, res, next) {
       "notice",
       `The ${classification_name} was successfully added.`
     )
-    res.status(201).render("./inventory/management", {
-        title:"Vehicle Management",
-        errors: null,
-        nav,
-        invManagement,
-    })
+    res.status(201).redirect("/inv")
   } else {
     req.flash("notice", `Sorry, the ${classification_name} couldn't be added.`)
     res.status(501).render("inventory/add-classification", {
@@ -128,8 +123,7 @@ invCont.addVehicle = async function (req, res, next) {
     inv_miles,
     inv_color
   } = req.body
-  const invManagement = await utilities.buildManagementView()
-  
+
   const addVehicle = await invModel.addVehicle(
     classification_id,
     inv_make,
@@ -148,12 +142,7 @@ invCont.addVehicle = async function (req, res, next) {
       "notice",
       `The vehicle ${inv_make} ${inv_model} was successfully added.`
     )
-    res.status(201).render("./inventory/management", {
-        title:"Vehicle Management",
-        errors: null,
-        nav,
-        invManagement,
-    })
+    res.status(201).redirect("/inv")
   } else {
     req.flash("notice", `Sorry, the ${inv_make} ${inv_model} couldn't be added.`)
     res.status(501).render("inventory/add-inventory", {
