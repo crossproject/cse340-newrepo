@@ -14,8 +14,10 @@
  </ul>
 <% } %>
 
-<form action="/inv/inventory/add-classification" method="post">
+<form id="classificationForm" action="/inv/inventory/add-classification" method="post" class="validated-form">
+    <span>Field is required</span>
     <label for="classification_name">Classification Name</label>
-    <input type="text" name="classification_name" pattern="[a-zA-Z0-9]+" required value="<%= locals.classification_name %>">
-    <input type="submit" value="Add Classification">
+    <span>Name must be alphabetic characters only</span>
+    <input type="text" id="classification_name" name="classification_name" pattern="[a-zA-Z0-9]+" required value="<%= locals.classification_name %>">
+    <input type="submit" value="Add Classification" class="form-submit">
 </form>

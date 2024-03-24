@@ -284,6 +284,52 @@ h1 {
   max-width: 100%;
 }
 
+/* Forms */
+form {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 320px;
+}
+form label,
+form input,
+form textarea,
+form span {
+  display: block;
+  width: 100%;
+}
+
+form label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+form span {
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.form-submit {
+  margin-top: 20px;
+}
+
+.validated-form input:required:valid,
+.validated-form select:required:valid,
+.validated-form textarea:required:valid {
+    border: 2px solid green;
+}
+.validated-form input:required,
+.validated-form select:required,
+.validated-form textarea:required {
+    border: 2px solid red;
+}
+
+/* Flash notice */
+.notice {
+  color: red;
+}
 
 /* Large Screen */
 @media screen and (min-width: 39.99em) {

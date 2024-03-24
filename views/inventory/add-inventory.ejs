@@ -14,36 +14,38 @@
  </ul>
 <% } %>
 
-<form action="/inv/inventory/add-inventory" method="post">
-    <label for="classification_id">Classification</label>
+<form id="inventoryForm" action="/inv/inventory/add-inventory" method="post" class="validated-form">
+    <span>All fields are required</span>
+
+    <label for="classificationList">Classification</label>
     <%- classificationList %>
 
     <label for="inv_make">Make</label>
-    <input type="text" name="inv_make" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_make %>">
+    <input type="text" id="inv_make" name="inv_make" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_make %>">
 
     <label for="inv_model">Model</label>
-    <input type="text" name="inv_model" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_model %>">
+    <input type="text" id="inv_model" name="inv_model" pattern="[a-zA-Z]{3,}" required value="<%= locals.inv_model %>">
 
     <label for="inv_description">Description</label>
-    <textarea name="inv_description" required><%= locals.inv_description %></textarea>
+    <textarea id="inv_description" name="inv_description" required><%= locals.inv_description %></textarea>
 
     <label for="inv_image">Image Path</label>
-    <input type="text" name="inv_image" readonly value="/images/vehicles/no-image.png">
+    <input type="text" id="inv_image" name="inv_image" readonly value="/images/vehicles/no-image.png">
 
     <label for="inv_thumbnail">Image Thumbnail</label>
-    <input type="text" name="inv_thumbnail" readonly value="/images/vehicles/no-image.png">
+    <input type="text" id="inv_thumbnail" name="inv_thumbnail" readonly value="/images/vehicles/no-image.png">
 
     <label for="inv_price">Price</label>
-    <input type="text" name="inv_price" pattern="[0-9]+" required value="<%= locals.inv_price %>">
+    <input type="text" id="inv_price" name="inv_price" pattern="[0-9]+" required value="<%= locals.inv_price %>">
 
     <label for="inv_year">Year</label>
-    <input type="text" name="inv_year" pattern="\d{4}" required value="<%= locals.inv_year %>">
+    <input type="text" id="inv_year" name="inv_year" pattern="\d{4}" required value="<%= locals.inv_year %>">
 
     <label for="inv_miles">Miles</label>
-    <input type="text" name="inv_miles" pattern="[0-9]+" required value="<%= locals.inv_miles %>">
+    <input type="text" id="inv_miles" name="inv_miles" pattern="[0-9]+" required value="<%= locals.inv_miles %>">
 
     <label for="inv_color">Color</label>
-    <input type="text" name="inv_color" pattern="[a-zA-Z]+" required value="<%= locals.inv_color %>">
+    <input type="text" id="inv_color" name="inv_color" pattern="[a-zA-Z]+" required value="<%= locals.inv_color %>">
 
-    <input type="submit" value="Add Vehicle">
+    <input type="submit" value="Add Vehicle" class="form-submit">
 </form>

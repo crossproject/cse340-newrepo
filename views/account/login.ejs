@@ -14,15 +14,18 @@
  </ul>
 <% } %>
 
-<form id="loginForm" action="/account/login" method="post">
-  <fieldset>
-    <label for="account_email">Email</label><br>
+<form id="loginForm" action="/account/login" method="post" class="validated-form">
+  
+    <label for="account_email">Email</label>
     <input type="email" id="account_email" name="account_email" required value="<%= locals.account_email %>">
+    
+    <label for="account_password">Password</label>
     <span>Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character</span> 
     <input type="password" id="account_password" name="account_password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
-    <input type="submit" value="Login">
+    
+    <input type="submit" value="Login" class="form-submit">
 
-  </fieldset>
+  
 </form>
 
 <span>No account? <a href="/account/register">Sign-up</a></span>
