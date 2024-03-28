@@ -328,7 +328,9 @@ form span {
 
 /* Flash notice */
 .notice {
-  color: red;
+  color: rgba(255, 0, 0, 0.76);
+  font-weight: bold;
+  font-style: italic;
 }
 
 /* Large Screen */

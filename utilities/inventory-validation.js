@@ -145,5 +145,33 @@ validate.classificationRules = () => {
   next()
 }
 
+ /* ******************************
+ * Check data and return errors or edit vehicle
+ * ***************************** */
+ validate.checkUpdateData = async (req, res, next) => {
+  const { inv_id, classification_id, inv_make, inv_model, inv_description, inv_price, inv_year, inv_miles, inv_color } = req.body
+  let classificationList = await Util.buildClassificationList(classification_id)
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    res.render("inventory/edit-inventory", {
+      errors,
+      title: "Edit Vehicle",
+      nav,
+      classificationList,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      inv_id
+    })
+    return
+  }
+  next()
+}
 
 module.exports = validate
