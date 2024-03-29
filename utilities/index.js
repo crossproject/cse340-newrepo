@@ -186,11 +186,10 @@ Util.checkJWTToken = (req, res, next) => {
  }
 
 /* ************************
- * Constructs username
+ * Get JWT Token Info
  ************************** */
-Util.getUser = async function (req, res, next) {
-  // Verify account existence
-  let userData
+Util.getJWTInfo = async function (req, res, next) {
+  let JWTData
   if (req.cookies.jwt) {
     jwt.verify(
      req.cookies.jwt,
@@ -199,13 +198,24 @@ Util.getUser = async function (req, res, next) {
       if (err) {
        console.log(err)
       }
-      console.log(accountData)
-      userData = '<a href="/account/">Welcome ' + accountData.account_firstname + '</a>'
-      userData += '<a title="Click to log out" href="#">Logout</a>'
-      
+      JWTData = accountData
      })
    } else {
-    console.log("no")
+    JWTData = false
+   }
+  return JWTData
+}
+/* ************************
+ * Constructs Headers username
+ ************************** */
+Util.getUser = async function (req, res, next) {
+  let userData
+  let JWTData = await this.getJWTInfo(req)
+  
+  if (JWTData) {
+      userData = '<a href="/account/">Welcome ' + JWTData.account_firstname + '</a>'
+      userData += '<a title="Click to log out" href="#">Logout</a>'
+   } else {
     userData = '<a title="Click to log in" href="/account/login">My Account</a>'
    }
   return userData

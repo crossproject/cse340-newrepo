@@ -1,4 +1,5 @@
 const utilities = require("../utilities/")
+const authZ = require("../utilities/account-permission")
 const accountModel = require("../models/account-model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -38,11 +39,31 @@ async function buildRegister(req, res, next) {
 async function buildAccountRootView(req, res, next) {
   let nav = await utilities.getNav()
   let userData = await utilities.getUser(req)
+  let invManagement
+  let updateLink
+
+  const userInformation = await utilities.getJWTInfo(req)
+  let userName = userInformation.account_firstname
+
+  let isStaff = await authZ.isStaff(req)
+
+  if (isStaff) {
+    invManagement = '<h3>Inventory Management</h3>'
+    invManagement += '<a href="/inv/">Manage Inventory</a>'
+  } else {
+    invManagement = null
+  }
+  updateLink = `<a href="/account/edit/${userInformation.account_id}">Edit Account Information</a>`
+  
+
   res.render("account/management", {
-    title: "User Management",
+    title: "Account Management",
     errors: null,
     nav,
     userData,
+    userName,
+    updateLink,
+    invManagement,
   })
 }
 
