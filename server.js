@@ -81,6 +81,7 @@ const host = process.env.HOST
 *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   console.log(err)
   if(err.status == 404){
@@ -93,7 +94,8 @@ app.use(async (err, req, res, next) => {
   res.render("errors/error", {
     title: err.status || 'Server Error',
     message,
-    nav
+    nav,
+    userData,
   })
 })
 

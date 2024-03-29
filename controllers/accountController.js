@@ -9,10 +9,12 @@ require("dotenv").config()
 * *************************************** */
 async function buildLogin(req, res, next) {
     let nav = await utilities.getNav()
+    let userData = await utilities.getUser(req)
     res.render("./account/login", {
       title: "Login",
       errors: null,
       nav,
+      userData,
     })
   }
   
@@ -21,10 +23,12 @@ async function buildLogin(req, res, next) {
 * *************************************** */
 async function buildRegister(req, res, next) {
   let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
   res.render("account/register", {
     title: "Register",
     errors: null,
     nav,
+    userData,
   })
 }
 
@@ -33,10 +37,12 @@ async function buildRegister(req, res, next) {
 * *************************************** */
 async function buildAccountRootView(req, res, next) {
   let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
   res.render("account/management", {
     title: "User Management",
     errors: null,
     nav,
+    userData,
   })
 }
 
@@ -45,6 +51,7 @@ async function buildAccountRootView(req, res, next) {
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
   // Hash the password before storing
@@ -57,6 +64,7 @@ async function registerAccount(req, res) {
     res.status(500).render("account/register", {
       title: "Registration",
       nav,
+      userData,
       errors: null,
     })
   }
@@ -93,6 +101,7 @@ async function registerAccount(req, res) {
  * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
   if (!accountData) {
@@ -100,6 +109,7 @@ async function accountLogin(req, res) {
    res.status(400).render("account/login", {
     title: "Login",
     nav,
+    userData,
     errors: null,
     account_email,
    })

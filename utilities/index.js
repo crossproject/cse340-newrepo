@@ -185,7 +185,31 @@ Util.checkJWTToken = (req, res, next) => {
   }
  }
 
-
+/* ************************
+ * Constructs username
+ ************************** */
+Util.getUser = async function (req, res, next) {
+  // Verify account existence
+  let userData
+  if (req.cookies.jwt) {
+    jwt.verify(
+     req.cookies.jwt,
+     process.env.ACCESS_TOKEN_SECRET,
+     function (err, accountData) {
+      if (err) {
+       console.log(err)
+      }
+      console.log(accountData)
+      userData = '<a href="/account/">Welcome ' + accountData.account_firstname + '</a>'
+      userData += '<a title="Click to log out" href="#">Logout</a>'
+      
+     })
+   } else {
+    console.log("no")
+    userData = '<a title="Click to log in" href="/account/login">My Account</a>'
+   }
+  return userData
+}
 
  /* ****************************************
  * Middleware For Handling Errors
