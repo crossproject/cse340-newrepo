@@ -20,10 +20,19 @@ router.get("/login",
   utilities.handleErrors(accountController.buildLogin)
   );
 
+// Route to login out
+router.get("/logout",
+  utilities.handleErrors(accountController.logoutProcess)
+  );
+
 // Route to register view
 router.get("/register",
   utilities.handleErrors(accountController.buildRegister)
   );
+
+// Route to build edit user view
+router.get("/edit/:userId", utilities.handleErrors(accountController.buildUpdateAccount));
+
 
 /*  **********************************
 *  POST Routes
@@ -44,5 +53,21 @@ router.post(
     regValidate.checkRegData,
     utilities.handleErrors(accountController.registerAccount)
   )
+
+// Update account data
+router.post(
+  "/account-update",
+  regValidate.updateDataRules(),
+  regValidate.checkUserUpdateData,
+  utilities.handleErrors(accountController.updateUserAccount)
+)
+
+// Update password
+router.post(
+  "/password-update",
+  regValidate.updatePasswordRules(),
+  regValidate.checkPasswordUpdateData,
+  utilities.handleErrors(accountController.updatePassword)
+)
 
 module.exports = router;

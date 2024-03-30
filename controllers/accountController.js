@@ -105,6 +105,7 @@ async function registerAccount(req, res) {
     res.status(201).render("account/login", {
       title: "Login",
       errors: null,
+      userData,
       nav,
     })
   } else {
@@ -112,6 +113,7 @@ async function registerAccount(req, res) {
     res.status(501).render("account/register", {
       title: "Registration",
       errors: null,
+      userData,
       nav,
     })
   }
@@ -152,4 +154,113 @@ async function accountLogin(req, res) {
   }
  }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountRootView }
+/* ****************************************
+*  Update user process
+* *************************************** */
+async function updateUserAccount(req, res) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+
+  const updateData = await accountModel.updateDataAccount(
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email
+  )
+
+  if (updateData) {
+    req.flash(
+      "notice",
+      "Congratulations, your information has been updated."
+    )
+    res.status(201).redirect("/account")
+  } else {
+    req.flash("notice", "Sorry, the update has failed.")
+    res.status(501).render("account/", {
+      title: "Account Management",
+      errors: null,
+      userData,
+      nav,
+    })
+  }
+}
+
+/* ****************************************
+*  Update account view
+* *************************************** */
+async function buildUpdateAccount(req, res, next) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+
+  const account_id = req.params.userId
+
+  const accountData = await accountModel.getAccountById(account_id)
+
+  res.render("account/update", {
+    title: "Account Management",
+    errors: null,
+    nav,
+    userData,
+    account_firstname:accountData.account_firstname,
+    account_lastname:accountData.account_lastname,
+    account_email:accountData.account_email,
+    account_id:account_id
+  })
+}
+
+/* ****************************************
+*  Update password process
+* *************************************** */
+async function updatePassword(req, res) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  const { account_id, account_password } = req.body
+
+  // Hash the password before storing
+  let hashedPassword
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(account_password, 10)
+  } catch (error) {
+    req.flash("notice", 'Sorry, there was an error processing the registration.')
+    res.status(500).render("account/update", {
+      title: "Account Management",
+      nav,
+      userData,
+      errors: null,
+    })
+  }
+
+  const updateData = await accountModel.updatePasswordAccount(
+    account_id,
+    hashedPassword
+  )
+
+  if (updateData) {
+    req.flash(
+      "notice",
+      "Congratulations, your password has been changed."
+    )
+    res.status(201).redirect("/account")
+  } else {
+    req.flash("notice", "Sorry, the password couldn't be changed.")
+    res.status(501).render("account/update", {
+      title: "Account Management",
+      errors: null,
+      userData,
+      nav,
+    })
+  }
+}
+
+/* ****************************************
+*  Logout process
+* *************************************** */
+async function logoutProcess(req, res, next) {
+  res.clearCookie("jwt")
+  res.status(201).redirect("/")
+}
+
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountRootView, updateUserAccount, buildUpdateAccount, updatePassword, logoutProcess }

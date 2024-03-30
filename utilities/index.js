@@ -214,7 +214,8 @@ Util.getUser = async function (req, res, next) {
   
   if (JWTData) {
       userData = '<a href="/account/">Welcome ' + JWTData.account_firstname + '</a>'
-      userData += '<a title="Click to log out" href="#">Logout</a>'
+      userData += '<a title="Click to log out" href="/account/logout">Logout</a>'
+      //'<form action="/logoff" method="post" class="logoutForm"><input type="submit" value="Logout"></form>'
    } else {
     userData = '<a title="Click to log in" href="/account/login">My Account</a>'
    }
