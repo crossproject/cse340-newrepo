@@ -48,8 +48,10 @@ async function buildAccountRootView(req, res, next) {
   let isStaff = await authZ.isStaff(req)
 
   if (isStaff) {
-    invManagement = '<h3>Inventory Management</h3>'
+    invManagement =  '<h3>Inventory Management</h3>'
+    invManagement += '<div class="management-view">'
     invManagement += '<a href="/inv/">Manage Inventory</a>'
+    invManagement += '</div>'
   } else {
     invManagement = null
   }

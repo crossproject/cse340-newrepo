@@ -152,19 +152,26 @@ validate.checkRegData = async (req, res, next) => {
         .isLength({ min: 2 })
         .withMessage("Please provide a last name."), // on error this message is sent.
   
+      body("account_id")
+        .notEmpty(),
+      
       // valid email is required and cannot already exist in the database
       body("account_email")
-        .trim()
-        .isEmail()
-        .normalizeEmail() // refer to validator.js docs
-        .withMessage("A valid email is required.")
-        .custom(async (account_email) => { //Fix needed
-          const emailExists = await accountModel.checkExistingEmail(account_email)
-          if (emailExists){
-            throw new Error("Email exists. Please log in or use different email")
-          }
-        }),
-    ]}
+      .trim()
+      .isEmail()
+      .normalizeEmail() // refer to validator.js docs
+      .withMessage("A valid email is required.")
+      .custom(async (account_email, { req }) => { //Fix needed
+        const actualInformation = await accountModel.getAccountById(req.body.account_id)
+        if (actualInformation.account_email == account_email){
+          return true
+        } else {
+        const emailExists = await accountModel.checkExistingEmail(account_email)
+        if (emailExists){
+          throw new Error("Email exists. Please use a different email")
+      }}})
+      ]}
+        
   
 
 
@@ -230,6 +237,8 @@ validate.checkPasswordUpdateData = async (req, res, next) => {
       account_firstname:userInfo.account_firstname,
       account_lastname:userInfo.account_lastname,
       account_email:userInfo.account_email,
+      account_id:userInfo.account_id,
+      pw_account_id:userInfo.account_id
     })
     return
   }

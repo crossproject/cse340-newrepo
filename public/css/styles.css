@@ -52,6 +52,9 @@ a {
   font-family: "Ubuntu", sans-serif;
   color: black;
   text-transform: uppercase;
+  display: block;
+  text-align: end;
+  margin-top: 5px;
 }
 
 
@@ -315,6 +318,11 @@ form span {
   margin-top: 20px;
 }
 
+/* Password Form */
+#passwordUpdateForm {
+  margin-top: 10px;
+}
+
 .validated-form input:required:valid,
 .validated-form select:required:valid,
 .validated-form textarea:required:valid {
@@ -333,7 +341,20 @@ form span {
   font-style: italic;
 }
 
+.management-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.management-view a, 
+.management-view span {
+  display: block;
+  margin: 10px;
+}
+
+/* ************ */
 /* Large Screen */
+/* ************ */
 @media screen and (min-width: 39.99em) {
   
   /* Body */
