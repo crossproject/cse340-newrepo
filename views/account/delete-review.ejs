@@ -17,7 +17,7 @@
 
 
 <div class="deleteReview">
-<h3>Delete <%- carReview %> Review</h3>
+<h2>Delete <%- carReview %> Review</h2>
 <form id="deleteReviewForm" action="/account/review/delete-review" method="post" class="validated-form">
 
 <span>Confirm Correct Item! Deletion cannot be undone.</span>
@@ -34,3 +34,4 @@
 <% if(locals.review_id) { %> value="<%= locals.review_id %>"
 <% } %>>
 </form>
+</div>
