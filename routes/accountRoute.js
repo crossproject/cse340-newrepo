@@ -31,8 +31,19 @@ router.get("/register",
   );
 
 // Route to build edit user view
-router.get("/edit/:userId", utilities.handleErrors(accountController.buildUpdateAccount));
+router.get("/edit/:userId",
+utilities.checkLogin,
+utilities.handleErrors(accountController.buildUpdateAccount));
 
+// Route to build review edit view
+router.get("/review/edit/:reviewId",
+utilities.checkLogin,
+utilities.handleErrors(accountController.buildEditReviewView));
+
+// Route to build review delete view
+router.get("/review/delete/:reviewId",
+utilities.checkLogin,
+utilities.handleErrors(accountController.buildDeleteReviewView));
 
 /*  **********************************
 *  POST Routes
@@ -69,5 +80,21 @@ router.post(
   regValidate.checkPasswordUpdateData,
   utilities.handleErrors(accountController.updatePassword)
 )
+
+// Route to edit a review
+router.post(
+  "/review/edit-review",
+  utilities.checkLogin,
+  regValidate.editReviewRules(),
+  regValidate.checkEditNewReview,
+  utilities.handleErrors(accountController.updateReview)
+);
+
+// Route to edit a review
+router.post(
+  "/review/delete-review",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.deleteReview)
+);
 
 module.exports = router;

@@ -45,6 +45,7 @@ async function buildAccountRootView(req, res, next) {
   const userInformation = await utilities.getJWTInfo(req)
   let userName = userInformation.account_firstname
 
+  // Render Inventory Management
   let isStaff = await authZ.isStaff(req)
 
   if (isStaff) {
@@ -58,6 +59,19 @@ async function buildAccountRootView(req, res, next) {
   updateLink = `<a href="/account/edit/${userInformation.account_id}">Edit Account Information</a>`
   
 
+  // Render Review Management
+  let reviewHistory = await accountModel.getReviewByAccountId(userInformation.account_id)
+  let reviewManagement = '<ul id="reviewDisplay">'
+  
+  reviewHistory.forEach(function (row) {
+    reviewManagement += `<li>Reviewed the ${row.inv_year} ${row.inv_make} ${row.inv_model} on ${formatDate(row.review_date)} | `
+    reviewManagement += `<a href='/account/review/edit/${row.review_id}'>Edit</a> | `
+    reviewManagement += `<a href='/account/review/delete/${row.review_id}'>Delete</a>`
+    reviewManagement += `</li>`
+  })
+
+  reviewManagement += '</ul>'
+
   res.render("account/management", {
     title: "Account Management",
     errors: null,
@@ -66,6 +80,7 @@ async function buildAccountRootView(req, res, next) {
     userName,
     updateLink,
     invManagement,
+    reviewManagement
   })
 }
 
@@ -256,6 +271,152 @@ async function updatePassword(req, res) {
   }
 }
 
+/* ***************************
+ *  Build edit review view
+ * ************************** */
+ async function buildEditReviewView(req, res, next) {
+  const review_id = req.params.reviewId
+  const data = await accountModel.getReviewByReviewId(review_id)
+
+  let carReview = `${data.inv_year} ${data.inv_model} ${data.inv_make}`
+
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  
+  let reviewDate = formatDate(data.review_date)
+
+  res.render("./account/edit-review", {
+    title:"Edit Review",
+    errors: null,
+    nav,
+    userData,
+    carReview,
+    reviewDate,
+    review_text:data.review_text,
+    review_id,
+
+  })
+}
+
+/* ***************************
+ *  Build delete review view
+ * ************************** */
+async function buildDeleteReviewView(req, res, next) {
+  const review_id = req.params.reviewId
+  const data = await accountModel.getReviewByReviewId(review_id)
+
+  let carReview = `${data.inv_year} ${data.inv_model} ${data.inv_make}`
+
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  
+  let reviewDate = formatDate(data.review_date)
+
+  res.render("./account/delete-review", {
+    title:"Delete Review",
+    errors: null,
+    nav,
+    userData,
+    carReview,
+    reviewDate,
+    review_text:data.review_text,
+    review_id,
+
+  })
+}
+
+/* ****************************************
+*  Update review process
+* *************************************** */
+async function updateReview(req, res) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+
+  const { review_id, review_text } = req.body
+
+  const updateData = await accountModel.editReview(
+    review_id,
+    review_text
+  )
+
+  if (updateData) {
+    req.flash(
+      "notice",
+      "Congratulations, the review has been updated."
+    )
+    res.status(201).redirect("/account")
+  } else {
+    req.flash("notice", "Sorry, the update has failed.")
+    res.status(501).render("account/", {
+      title: "Edit Review",
+      errors: null,
+      userData,
+      nav,
+    })
+  }
+}
+
+/* ****************************************
+*  Update review process
+* *************************************** */
+async function deleteReview(req, res) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  
+  const { review_id } = req.body
+
+  let reviewId = parseInt(review_id)
+
+  
+  const deleteData = await accountModel.deleteReview(
+    reviewId
+  )
+
+  
+  if (deleteData) {
+    req.flash(
+      "notice",
+      "Congratulations, the review has been deleted."
+    )
+    res.status(201).redirect("/account")
+  } else {
+    req.flash("notice", "Sorry, the delete has failed.")
+    res.status(501).render("account/", {
+      title: "Delete Review",
+      errors: null,
+      userData,
+      nav,
+    })
+  }
+}
+
+/* ************************
+ * Format Date
+ ************************** */
+function formatDate(date) {
+  const d = new Date(date)
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
+
+  const year = d.getFullYear()
+  const monthName = months[d.getMonth()]
+  const day = d.getDate()
+  
+  return `${monthName} ${day}, ${year}` 
+}
+
 /* ****************************************
 *  Logout process
 * *************************************** */
@@ -265,4 +426,18 @@ async function logoutProcess(req, res, next) {
 }
 
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountRootView, updateUserAccount, buildUpdateAccount, updatePassword, logoutProcess }
+module.exports = {
+  buildLogin,
+  buildRegister,
+  registerAccount,
+  accountLogin,
+  buildAccountRootView,
+  updateUserAccount,
+  buildUpdateAccount,
+  updatePassword,
+  logoutProcess,
+  buildEditReviewView,
+  updateReview,
+  buildDeleteReviewView,
+  deleteReview
+}

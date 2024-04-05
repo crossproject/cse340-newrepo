@@ -352,6 +352,26 @@ form span {
   margin: 10px;
 }
 
+/* Reviews List */
+.customerReview ul {
+  padding-left: 20px;
+}
+
+.customerReview li {
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+
+.reviewDate {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.reviewText {
+  font-style: italic;
+}
+
+
 /* ************ */
 /* Large Screen */
 /* ************ */

@@ -58,6 +58,7 @@ router.get("/delete/:invId",
     );
 
 
+
 /*  **********************************
 *  POST Routes
 * ********************************* */
@@ -98,5 +99,17 @@ router.post(
     utilities.checkLogin,
     authZ.employeePermission,
     utilities.handleErrors(invController.deleteInventory))
+
+
+// Route to add a review
+router.post(
+    "/review/add-review/:invId",
+    utilities.checkLogin,
+    invValidate.addReviewRules(),
+    invValidate.checkAddNewReview,
+    utilities.handleErrors(invController.addReview)
+);
+
+
 
 module.exports = router;

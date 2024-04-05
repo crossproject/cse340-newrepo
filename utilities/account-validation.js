@@ -245,4 +245,66 @@ validate.checkPasswordUpdateData = async (req, res, next) => {
   next()
 }
 
+  /*  **********************************
+  *  Edit review Validation Rules
+  * ********************************* */
+
+  validate.editReviewRules = () => {
+    return [
+      body("review_id")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Invalid review."), // on error this message is sent.
+        
+      body("review_text")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 10 })
+      .withMessage("The review should have at least 10 characters."), // on error this message is sent.
+
+
+    ]
+  }
+
+
+   /* ******************************
+ * Check review data and return errors or add review
+ * ***************************** */
+ validate.checkEditNewReview = async (req, res, next) => {
+  const { review_id, review_text, review_date } = req.body
+  
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    
+    const data = await accountModel.getReviewByReviewId(review_id)
+  
+    let carReview = `${data.inv_year} ${data.inv_model} ${data.inv_make}`
+  
+    let nav = await utilities.getNav()
+    let userData = await utilities.getUser(req)
+    
+    
+
+    res.render('./account/edit-review', {
+
+      title:"Edit Review",
+      errors,
+      nav,
+      userData,
+      carReview,
+      reviewDate:review_date,
+      review_id,
+
+      review_text,
+
+
+    })
+    return
+  }
+  next()
+}
+
   module.exports = validate

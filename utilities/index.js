@@ -141,12 +141,6 @@ Util.buildClassificationList = async function (classification_id = null) {
 }
 
 
-/* ****************************************
- * Word functions
- **************************************** */
-function capitalizeWord(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
 
 
  /* ****************************************
@@ -215,11 +209,108 @@ Util.getUser = async function (req, res, next) {
   if (JWTData) {
       userData = '<a href="/account/">Welcome ' + JWTData.account_firstname + '</a>'
       userData += '<a title="Click to log out" href="/account/logout">Logout</a>'
-      //'<form action="/logoff" method="post" class="logoutForm"><input type="submit" value="Logout"></form>'
    } else {
     userData = '<a title="Click to log in" href="/account/login">My Account</a>'
    }
   return userData
+}
+
+/* ************************
+ * Build Customer Reviews
+ ************************** */
+Util.buildCustomerReview = async function (data) {
+  let review
+  
+  if(Object.keys(data).length > 0){
+    review = '<div class="customerReview">'
+    review += '<ul>'
+    data.forEach(rev => { 
+      review += '<li>'
+      review += '<div class="reviewDate">'
+      review += createScreenName(rev.account_firstname, rev.account_lastname) + ' wrote on ' + formatDate(rev.review_date)
+      review += '</div>'
+
+      review += '<div class="reviewText">'
+      review += rev.review_text
+      review += '</div>'
+      review += '</li>'
+    })
+    review += '</ul>'
+    review += '</div>'
+  } else {
+    review = '<p class="noReview">Be the first to write a review.</p>'
+  }
+  return review
+}
+
+/* ************************
+ * Build add new Review
+ ************************** */
+Util.buildAddReview = async function (req, res, next) {
+  const inv_id = req.params.invId
+  let reviewForm
+  let JWTData = await this.getJWTInfo(req)
+  
+  if(JWTData){
+    reviewForm = '<div class="addNewReview">'
+    reviewForm += '<h3>Add Your Own Review</h3>'
+    reviewForm += `<form id="reviewForm" action="/inv/review/add-review/${inv_id}" method="post" class="validated-form">`
+
+    reviewForm += '<label for="screen_name">Screen Name:</label>'
+    reviewForm += `<input type="text" id="screen_name" name="screen_name" value="${createScreenName(JWTData.account_firstname, JWTData.account_lastname)}" readonly>`
+
+    reviewForm += '<label for="review_text">Review:</label>'
+    reviewForm += '<textarea id="review_text" name="review_text" minlength="10" required></textarea>'
+
+    reviewForm += '<input type="submit" value="Submit Review" id="submitButton">'
+
+    reviewForm += `<input type="hidden" name="account_id" value=${JWTData.account_id}>`
+    reviewForm += `<input type="hidden" name="inv_id" value=${inv_id}>`
+    
+
+    reviewForm += '</form>'
+    } else {
+    reviewForm = '<p class="noLoginReview">You must <a href="/account/login">login</a> to write a review.</p>'
+  }
+  return reviewForm
+}
+
+/* ************************
+ * Format Date
+ ************************** */
+function formatDate(date) {
+  const d = new Date(date)
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
+
+  const year = d.getFullYear()
+  const monthName = months[d.getMonth()]
+  const day = d.getDate()
+  
+  return `${monthName} ${day}, ${year}` 
+}
+
+/* ****************************************
+ * Word functions
+ **************************************** */
+function capitalizeWord(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+function createScreenName(firstname, lastname) {
+  return firstname.charAt(0).toUpperCase() + lastname.charAt(0).toUpperCase() + lastname.slice(1)
 }
 
  /* ****************************************

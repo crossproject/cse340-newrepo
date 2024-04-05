@@ -117,7 +117,7 @@ validate.classificationRules = () => {
         .withMessage("Please provide a correct Color."), // on error this message is sent.
 
     ]
-}
+  }
 
  /* ******************************
  * Check data and return errors or add vehicle
@@ -179,5 +179,75 @@ validate.classificationRules = () => {
   }
   next()
 }
+
+  /*  **********************************
+  *  Add new review Validation Rules
+  * ********************************* */
+
+  validate.addReviewRules = () => {
+    return [         
+        body("review_text")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 10 })
+        .withMessage("The review should have at least 10 characters."), // on error this message is sent.
+
+        body("account_id")
+        .trim()
+        .escape()
+        .notEmpty()
+        .withMessage("Invalid account."), // on error this message is sent.
+
+        body("inv_id")
+        .trim()
+        .escape()
+        .notEmpty()
+        .withMessage("Invalid article."), // on error this message is sent.
+
+    ]
+  }
+
+ /* ******************************
+ * Check review data and return errors or add review
+ * ***************************** */
+ validate.checkAddNewReview = async (req, res, next) => {
+  const { screen_name, review_text, account_id, inv_id } = req.body
+  
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    let userData = await utilities.getUser(req)
+
+    const data = await inventoryModel.getCarDetailsByInvId(inv_id)
+    const details = await utilities.buildByInvId(data)
+
+    const carName = data.inv_make + ' ' + data.inv_model
+
+    const reviews = await inventoryModel.getReviewsByInvId(inv_id)
+    const customerReviews = await utilities.buildCustomerReview(reviews)
+
+    const addNewReview = await utilities.buildAddReview(req)
+
+    res.render("./inventory/details", {
+      title:carName,
+      errors,
+      nav,
+      userData,
+      details,
+      customerReviews,
+      addNewReview,
+      screen_name,
+      review_text,
+      account_id,
+      inv_id
+    })
+    return
+  }
+  next()
+}
+
+
 
 module.exports = validate

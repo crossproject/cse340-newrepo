@@ -29,6 +29,14 @@ invCont.buildByInvId = async function (req, res, next) {
   const inv_id = req.params.invId
   const data = await invModel.getCarDetailsByInvId(inv_id)
   const details = await utilities.buildByInvId(data)
+
+  // render customer reviews
+  const reviews = await invModel.getReviewsByInvId(inv_id)
+  const customerReviews = await utilities.buildCustomerReview(reviews)
+
+  // render add new review
+  const addNewReview = await utilities.buildAddReview(req)
+
   let nav = await utilities.getNav()
   let userData = await utilities.getUser(req)
   const carName = data.inv_make + ' ' + data.inv_model
@@ -38,6 +46,8 @@ invCont.buildByInvId = async function (req, res, next) {
     nav,
     userData,
     details,
+    customerReviews,
+    addNewReview,
   })
 }
 
@@ -352,5 +362,118 @@ invCont.deleteInventory = async function (req, res, next) {
     })
   }
 }
+
+/* ****************************************
+*  Add new review
+* *************************************** */
+invCont.addReview = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  const { 
+    review_text,
+    inv_id,
+    account_id
+  } = req.body
+
+  const addNewReview = await invModel.addReview(
+    review_text,
+    inv_id,
+    account_id
+  )
+
+  if (addNewReview) {
+    req.flash(
+      "notice",
+      `The review was successfully added.`
+    )
+    res.status(201).redirect(`/inv/detail/${inv_id}`)
+  } else {
+    req.flash("notice", `Sorry, the review couldn't be added.`)
+    res.status(501).render(`/inv/detail/${inv_id}`, {
+
+      errors,
+      title: "Add Vehicle",
+      nav,
+      userData,
+      screen_name,
+      review_text,
+      account_id,
+      inv_id
+
+    })
+  }
+}
+
+
+/* ****************************************
+*  Edit review
+* *************************************** */
+invCont.editReview = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let userData = await utilities.getUser(req)
+  const { 
+    review_id,
+    review_text,
+    inv_id,
+    account_id
+  } = req.body
+
+  const editReview = await invModel.editReview(
+    review_id,
+    review_text,
+    inv_id,
+    account_id
+  )
+
+  if (editReview) {
+    req.flash(
+      "notice",
+      `The review was successfully edited.`
+    )
+    res.status(201).redirect(`/account/`)
+  } else {
+    req.flash("notice", `Sorry, the review couldn't be edited.`)
+    res.status(501).render(`/inv/review/edit-review`, {
+
+      errors,
+      title: "Edit Review",
+      nav,
+      userData,
+      screen_name,
+      review_text,
+      account_id,
+      inv_id
+
+    })
+  }
+}
+
+
+
+/* ************************
+ * Format Date
+ ************************** */
+function formatDate(date) {
+  const d = new Date(date)
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
+
+  const year = d.getFullYear()
+  const monthName = months[d.getMonth()]
+  const day = d.getDate()
+  
+  return `${monthName} ${day}, ${year}` }
 
 module.exports = invCont
